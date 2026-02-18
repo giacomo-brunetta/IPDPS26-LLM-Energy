@@ -1,4 +1,4 @@
-# LLM-Inference-Power
+# IPDPS26-LLM-Energy
 
 Empirical reproducibility package for the IPDPS paper "Beyond Throughput: Performance and Energy Insights of LLM Inference Across AI Accelerators." This repo measures performance and energy for LLM inference across GPUs and dataflow accelerators using a consistent methodology and dataset.
 
@@ -31,6 +31,7 @@ export HF_CACHE_DIR=$HOME/.cache/huggingface
 docker run --gpus all -it --rm \
   --entrypoint /bin/bash \
   -e HF_TOKEN="$HF_TOKEN" \
+  -e PLATFORM=["Nvidia"/'AMD"/"Intel"] \
   -e HF_HOME="$HF_CACHE_DIR" \
   -v "$HF_CACHE_DIR":"$HF_CACHE_DIR" \
   -v "$PWD":/workspace/LLM-Inference-Power \
@@ -47,6 +48,11 @@ https://docs.vllm.ai/en/latest/getting_started/installation/gpu/
 - Global: `requirements.txt`
 - NVIDIA-only: `Nvidia/requirements.txt`
 - AMD-only: `AMD/requirements.txt`
+
+```bash
+pip install -r requirements.txt
+pip install -r $PLATFORM/requirements.txt
+```
 
 **How to run**
 
@@ -72,4 +78,3 @@ NUM_GPUS=4 ./Script/moe_parallel.sh [cuda/rocm/xpu]
 - FP8 runs are enabled with `-dtype fp8`. When omitted, bf16 is used (or fp16 where appropriate).
 - Dataflow scripts are templates and require vendor-specific client setup.
 - For multi-GPU runs, `NUM_GPUS` must match available devices.
-# IPDPS26-LLM-Energy
