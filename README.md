@@ -15,7 +15,7 @@ Empirical reproducibility package for the IPDPS paper "Beyond Throughput: Perfor
 - `AMD/`: AMD power profiler utilities.
 - `Testbeds/`: dataflow accelerator client templates.
 - `Dataset/`: dataset inputs used for the inference runs.
-- Top-level runners: `test_text_dataset.py`, `data_parallel_test.py`, `synthetic_test.py`, `KL_test.py`.
+- Top-level runners: `test_text_dataset.py`, `data_parallel_test.py`, `synthetic_test.py`.
 
 **Setup**
 See the vLLM Docker deployment guide for base images and GPU runtime expectations:
@@ -38,6 +38,11 @@ docker run --gpus all -it --rm \
   vllm/vllm-openai:latest
 ```
 
+Alternatively, install vllm locally. This step might require compiling the library.
+```
+https://docs.vllm.ai/en/latest/getting_started/installation/gpu/
+```
+
 **Requirements**
 - Global: `requirements.txt`
 - NVIDIA-only: `Nvidia/requirements.txt`
@@ -47,17 +52,17 @@ docker run --gpus all -it --rm \
 
 Single-GPU runs (Section III-C1 / IV-A):
 ```bash
-./Script/single_gpu.sh cuda
+./Script/single_gpu.sh [cuda/rocm/xpu]
 ```
 
 Multi-GPU scaling (Section III-C2 / IV-B):
 ```bash
-NUM_GPUS=8 ./Script/multi_gpu_scaling.sh cuda
+NUM_GPUS=8 ./Script/multi_gpu_scaling.sh [cuda/rocm/xpu]
 ```
 
 MoE parallelism comparison (Section III-C2 / IV-B):
 ```bash
-NUM_GPUS=4 ./Script/moe_parallel.sh cuda
+NUM_GPUS=4 ./Script/moe_parallel.sh [cuda/rocm/xpu]
 ```
 
 **Outputs**
