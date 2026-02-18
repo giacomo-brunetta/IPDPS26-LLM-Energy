@@ -1,0 +1,70 @@
+# LLM-Inference-Power
+
+Empirical reproducibility package for the IPDPS paper "Beyond Throughput: Performance and Energy Insights of LLM Inference Across AI Accelerators." This repo measures performance and energy for LLM inference across GPUs and dataflow accelerators using a consistent methodology and dataset.
+
+**What this repo does**
+- Runs single-GPU and multi-GPU inference experiments with vLLM on NVIDIA and AMD platforms.
+- Collects latency, throughput, and energy metrics via vendor power tooling.
+- Supports MoE parallelism comparisons (Tensor Parallel vs Expert Parallel).
+- Includes templates for dataflow accelerator runs (Cerebras CS3, SambaNova SN40L).
+
+**Repo layout**
+- `Script/`: experiment drivers aligned with paper sections.
+- `Utils/`: shared parsing, model loading, dataset handling, and results aggregation.
+- `Nvidia/`: NVIDIA power profiler utilities.
+- `AMD/`: AMD power profiler utilities.
+- `Testbeds/`: dataflow accelerator client templates.
+- `Dataset/`: dataset inputs used for the inference runs.
+- Top-level runners: `test_text_dataset.py`, `data_parallel_test.py`, `synthetic_test.py`, `KL_test.py`.
+
+**Setup**
+See the vLLM Docker deployment guide for base images and GPU runtime expectations:
+```
+https://docs.vllm.ai/en/stable/deployment/docker
+```
+
+Recommended Docker workflow (entrypoint set to bash, mount HF cache and project dir, pass HF token/cache):
+```bash
+export HF_TOKEN=YOUR_TOKEN_HERE
+export HF_CACHE_DIR=$HOME/.cache/huggingface
+
+docker run --gpus all -it --rm \
+  --entrypoint /bin/bash \
+  -e HF_TOKEN="$HF_TOKEN" \
+  -e HF_HOME="$HF_CACHE_DIR" \
+  -v "$HF_CACHE_DIR":"$HF_CACHE_DIR" \
+  -v "$PWD":/workspace/LLM-Inference-Power \
+  -w /workspace/LLM-Inference-Power \
+  vllm/vllm-openai:latest
+```
+
+**Requirements**
+- Global: `requirements.txt`
+- NVIDIA-only: `Nvidia/requirements.txt`
+- AMD-only: `AMD/requirements.txt`
+
+**How to run**
+
+Single-GPU runs (Section III-C1 / IV-A):
+```bash
+./Script/single_gpu.sh cuda
+```
+
+Multi-GPU scaling (Section III-C2 / IV-B):
+```bash
+NUM_GPUS=8 ./Script/multi_gpu_scaling.sh cuda
+```
+
+MoE parallelism comparison (Section III-C2 / IV-B):
+```bash
+NUM_GPUS=4 ./Script/moe_parallel.sh cuda
+```
+
+**Outputs**
+- Results are written by `Utils/results.py`. Check `Results/` for aggregated CSVs and intermediate logs.
+
+**Notes**
+- FP8 runs are enabled with `-dtype fp8`. When omitted, bf16 is used (or fp16 where appropriate).
+- Dataflow scripts are templates and require vendor-specific client setup.
+- For multi-GPU runs, `NUM_GPUS` must match available devices.
+# IPDPS26-LLM-Energy
