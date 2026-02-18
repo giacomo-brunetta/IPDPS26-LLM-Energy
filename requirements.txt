@@ -1,0 +1,10 @@
+datasets
+matplotlib
+numpy
+pandas
+ray
+requests
+sentencepiece
+torch
+transformers
+vllm
