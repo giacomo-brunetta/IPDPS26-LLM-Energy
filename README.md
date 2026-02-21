@@ -71,6 +71,28 @@ MoE parallelism comparison (Section III-C2 / IV-B):
 NUM_GPUS=4 ./Script/moe_parallel.sh [cuda/rocm/xpu]
 ```
 
+
+**Running Testbeds scripts**
+
+Set up the inference engine of the CS3 or SN40L system.
+
+Use the lightweight client workflow in `Testbeds/client.py`.
+
+Install only the client dependencies:
+```bash
+pip install -r Testbeds/requirements.txt
+```
+
+Run (batch size is a CLI parameter):
+```bash
+python Testbeds/client.py --batch-size 8
+```
+
+Notes:
+- Endpoint defaults to `http://localhost:8001/v1/chat/completions`.
+- Replace placeholder Hugging Face `token=''` values in `Testbeds/client.py`.
+- `--batch-size` controls the number of parallel worker processes.
+
 **Outputs**
 - Results are written by `Utils/results.py`. Check `Results/` for aggregated CSVs and intermediate logs.
 

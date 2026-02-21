@@ -6,6 +6,7 @@ Scripts
 - `Script/moe_parallel.sh`: MoE TP vs EP comparison on 4 GPUs (Section III-C2 / IV-B)
 - `Script/dataflow_cerebras.sh`: Cerebras CS3 template (Section III-C3 / IV-C)
 - `Script/dataflow_sambanova.sh`: SambaNova SN40L template (Section III-C3 / IV-C)
+- `Script/dataflow_client.sh`: runs `Testbeds/client.py` with configurable request parallelism (`batch_size`) for dataflow endpoint testing (Section III-C3 / IV-C)
 
 Notes
 - All GPU scripts use the same Python entry points already used in this repo: `test_text_dataset.py` and `data_parallel_test.py`.
